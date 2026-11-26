@@ -244,6 +244,9 @@ html.chaletOn .enLigne{opacity:1}
 .auSapin{pointer-events:none;text-shadow:0 2px 20px #070b2a}.auSapin .pli,.auSapin .actions,.auSapin button,.auSapin a{pointer-events:auto}.auSapin h2{font-size:clamp(34px,9vw,64px)}
 @media(max-width:560px){.final .bloc{padding-top:138px!important}.rdvS{padding-top:150px}}#feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
 #feuille[hidden]{display:none}
+@media(min-width:900px) and (min-aspect-ratio:13/10){#cal::before{inset:0 auto 0 0;width:58vw;height:auto;background:linear-gradient(90deg,#070b2ae0,#070b2a99 45%,#070b2a00)}.calBas{position:absolute;left:max(56px,5vw);top:50%;transform:translateY(-38%);width:min(420px,34vw);justify-items:start;text-align:left;gap:16px}.calT{font-size:clamp(44px,4.6vw,66px)}.calT br{display:inline}.calA{justify-content:flex-start}html.chaletOn .enLigne{right:auto;left:max(84px,calc(5vw + 30px));top:calc(24px + env(safe-area-inset-top,0px))}}
+.final .bloc{align-content:start;gap:clamp(14px,2.4vh,26px)}@media(max-width:560px){.final .bloc{align-content:space-between;padding-bottom:max(26px,env(safe-area-inset-bottom,0px))}.hotte.auPied{padding:10px 12px 9px;gap:6px}.hotte.auPied .gCad svg{width:15px;height:20px}}.hotte.auPied{margin:0 auto;background:#0b1236b8;padding:14px 18px 12px;border-radius:22px;width:min(400px,92vw);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 10px 30px #0006}.hotte.auPied .gCad::before,.hotte.auPied .gCad::after{left:4px;right:4px}
+
 .fBoite{position:relative;width:min(560px,100%);max-height:60vh;max-height:60svh;overflow:auto;overscroll-behavior:contain;background:#0f1742f2;border-radius:28px 28px 0 0;padding:24px var(--d) max(26px,env(safe-area-inset-bottom,0px)) var(--g);box-shadow:0 -20px 60px #060b2c80;animation:monte .55s cubic-bezier(.2,1,.3,1)}
 @keyframes monte{from{transform:translateY(100%)}}
 .fX{position:sticky;top:0;width:44px;height:44px;margin:-8px -8px 10px auto;border-radius:50%;background:#26306a;display:grid;place-items:center;z-index:2}
@@ -663,8 +666,8 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
  [1,-1].forEach(e=>{const pl=add(Hs,new T3.BoxGeometry(W+1.5,.2,LP),toitM,0,cy,e*cz);pl.rotation.x=e*A;const nx=Math.sin(A)*e,ny=Math.cos(A);
   const nv=add(Hs,new T3.BoxGeometry(W+1.62,.36,LP+.08),neige2,0,cy+ny*.26,e*cz+nx*.26);nv.rotation.x=e*A;
   const bo=add(Hs,new T3.CylinderGeometry(.21,.21,W+1.62,16),neige2,0,Ey+ny*.22-.02,e*(D/2+OV)+nx*.22);bo.rotation.z=PI/2;bo.scale.set(1,1,.85);
-  if(e>0){for(let k=0;k<46;k++){const x=-W/2-.7+k*(W+1.4)/45,gl=.1+((k*37)%7)*.045+(k%9===0?.18:0);const ic=add(Hs,new T3.ConeGeometry(.032+gl*.06,gl,6),givre,x,Ey-.12-gl/2,D/2+OV+.03,0);ic.rotation.x=PI}
-   for(let k=0;k<=56;k++){const t2=k/56,x=-W/2-.7+t2*(W+1.4);L.push([[x,Ey-.14-Math.abs(Math.sin(t2*PI*7))*.18,D/2+OV+.12],COL[k%5],.44,1+k*.7])}}});
+  if(e>0){for(let k=0;k<46;k++){const x=-W/2-.7+k*(W+1.4)/45,gl=.1+((k*37)%7)*.045+(k%9===0?.18:0);const ic=add(Hs,new T3.ConeGeometry(.032+gl*.06,gl,6),givre,x,Ey-.36-gl/2,D/2+OV+.03,0);ic.rotation.x=PI}
+   for(let k=0;k<=56;k++){const t2=k/56,x=-W/2-.7+t2*(W+1.4);L.push([[x,Ey-.38-Math.abs(Math.sin(t2*PI*7))*.16,D/2+OV+.12],COL[k%5],.44,1+k*.7])}}});
  /* bouts de pannes sous l'avancée */
  for(let k=0;k<5;k++){const y=TOP-.05+k*(RISE/5),z=D/2+OV*(1-k/5)-.1;[-1,1].forEach(e=>add(Hs,new T3.BoxGeometry(.16,.16,.5),poutre2,e*(W/2+.68),y-.12,z))}
  /* pignon central en façade */
@@ -728,6 +731,32 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
   add(Hs,new T3.BoxGeometry(.85,.08,1.7),neige2,-W/2-.5,1.12,D/2-.85);
   [0,1].forEach(k=>{const s2=add(Hs,new T3.BoxGeometry(.08,1.7,.02),k?rougeV:M(0x33418f,.5),W/2-.9+k*.12,.88,D/2+.28);s2.rotation.z=-.1;const p2=add(Hs,new T3.CylinderGeometry(.012,.012,1.3,6),acier,W/2-.55+k*.1,.68,D/2+.3);p2.rotation.z=-.15+k*.05});
   const lu=new T3.Group();add(lu,new T3.BoxGeometry(.5,.05,1),M(0xa0562c,.7),0,.24,0);[-1,1].forEach(e=>{const pa=new T3.Mesh(new T3.TorusGeometry(.5,.025,6,24,PI*.6),rougeV);pa.rotation.y=PI/2;pa.position.set(e*.22,.6,.1);pa.rotation.x=0;lu.add(pa);add(lu,new T3.BoxGeometry(.03,.22,.03),rougeV,e*.22,.12,-.3);add(lu,new T3.BoxGeometry(.03,.22,.03),rougeV,e*.22,.12,.3)});add(lu,new T3.BoxGeometry(.52,.06,1.02),neige2,0,.29,0);lu.position.set(W/2+.9,0,D/2+.7);lu.rotation.y=-.5;Hs.add(lu)}
+
+ /* ===== chalet v3 : bois sculpté, chevrons, balcon du pignon, neige moelleuse, halo chaud ===== */
+ {const bois=M(0x7a4a2a,.78),boisC=M(0xc58a52,.7),coeur=(sh,cx,cy,r)=>{const h=new T3.Path();h.moveTo(cx,cy-r);h.bezierCurveTo(cx-r*1.7,cy+r*.2,cx-r*.7,cy+r*1.5,cx,cy+r*.55);h.bezierCurveTo(cx+r*.7,cy+r*1.5,cx+r*1.7,cy+r*.2,cx,cy-r);sh.holes.push(h)};
+  /* lambrequin : planche festonnée et percée sous l'avancée du toit */
+  {const LW=W+1.46,n=Math.round(LW/.3),st=LW/n,sh=new T3.Shape();sh.moveTo(-LW/2,0);sh.lineTo(LW/2,0);sh.lineTo(LW/2,-.14);for(let k=n-1;k>=0;k--){const x0=-LW/2+k*st;sh.quadraticCurveTo(x0+st*.75,-.14,x0+st/2,-.25);sh.quadraticCurveTo(x0+st*.25,-.14,x0,-.14)}sh.lineTo(-LW/2,0);
+   for(let k=0;k<n;k++){const hl=new T3.Path(),cx=-LW/2+(k+.5)*st;hl.absarc(cx,-.09,.028,0,PI*2,true);sh.holes.push(hl)}
+   const g=new T3.ExtrudeGeometry(sh,{depth:.035,bevelEnabled:true,bevelSize:.006,bevelThickness:.006,bevelSegments:1,curveSegments:5});add(Hs,g,boisC,0,Ey-.04,D/2+OV-.03)}
+  /* chevrons sous l'avancée, bouts arrondis */
+  {const ln=OV+.1;for(let x=-W/2-.55;x<=W/2+.56;x+=.62){const c=add(Hs,new T3.BoxGeometry(.1,.13,ln),bois,x,(TOP+Ey)/2-.15,D/2+ln/2-.04);c.rotation.x=A;const b=add(Hs,new T3.CylinderGeometry(.065,.065,.1,10),bois,x,Ey-.12,D/2+OV-.06);b.rotation.z=PI/2}}
+  /* consoles sculptées sous la poutre de chaque étage */
+  for(let f=1;f<=NF;f++)for(let b=0;b<=NB;b++){const x=(b-NB/2)*BW,y=BASE+f*FH-(f===NF?.1:.06),q=new T3.Shape();q.moveTo(0,0);q.lineTo(.16,0);q.quadraticCurveTo(.16,-.08,.05,-.1);q.quadraticCurveTo(0,-.12,0,-.22);q.lineTo(0,0);const g=new T3.ExtrudeGeometry(q,{depth:.07,bevelEnabled:false});g.rotateY(-PI/2);g.translate(.035,0,0);add(Hs,g,boisC,x,y,D/2+.02)}
+  /* balcon du pignon : garde-corps à coeurs découpés */
+  {const BWd=GW-.5,y0=TOP+.02,z0=D/2+.34,bl=new T3.Shape();bl.moveTo(-.065,0);bl.lineTo(.065,0);bl.lineTo(.065,.24);bl.quadraticCurveTo(.065,.29,0,.3);bl.quadraticCurveTo(-.065,.29,-.065,.24);bl.lineTo(-.065,0);coeur(bl,0,.15,.04);
+   const bg=new T3.ExtrudeGeometry(bl,{depth:.03,bevelEnabled:false,curveSegments:6}),nb=Math.round(BWd/.15);
+   add(Hs,new T3.BoxGeometry(BWd+.1,.07,.5),bois,0,y0,z0-.18);add(Hs,new T3.BoxGeometry(BWd+.14,.05,.52),neige2,0,y0+.06,z0-.18);
+   for(let k=0;k<nb;k++)add(Hs,bg,boisC,-BWd/2+(k+.5)*BWd/nb,y0+.04,z0);
+   add(Hs,new T3.BoxGeometry(BWd+.12,.06,.09),bois,0,y0+.36,z0+.015);const nr=add(Hs,new T3.CylinderGeometry(.05,.05,BWd+.12,10),neige2,0,y0+.41,z0+.015);nr.rotation.z=PI/2;nr.scale.set(1,1,.8);
+   [-1,1].forEach(e=>add(Hs,new T3.BoxGeometry(.09,.42,.09),bois,e*(BWd/2+.02),y0+.2,z0+.015));
+   for(let k=0;k<=12;k++){const t2=k/12;L.push([[-BWd/2+t2*BWd,y0+.3-Math.abs(Math.sin(t2*PI*3))*.08,z0+.08],COL[(k+1)%5],.26,3+k])}}
+  /* neige moelleuse sur le pan avant */
+  {const R0=D/2+OV,Hr=TOP+RISE-Ey;[[-3.1,.25,1.5],[-1.2,.5,1.1],[1.6,.3,1.6],[3.4,.55,1],[.2,.72,.9],[-2.3,.7,.8],[2.6,.15,1.2]].forEach(([x,t2,sc])=>{if(Math.abs(x)<GW/2+.4&&t2>.2)return;const y=Ey+t2*Hr,z=R0*(1-t2),m=add(Hs,new T3.SphereGeometry(.5,18,10),neige2,x,y+Math.cos(A)*.32,z+Math.sin(A)*.32);m.scale.set(sc*1.5,.28,.9);m.rotation.x=A})}
+  /* fenêtres du pignon latéral et oeil-de-boeuf chaud */
+  [-1,1].forEach(e=>{add(Hs,new T3.CircleGeometry(.28,24),vitre,e*(W/2+.02),TOP+RISE*.42,0,0).rotation.y=e*PI/2;const r=add(Hs,new T3.TorusGeometry(.3,.04,8,24),boisC,e*(W/2+.03),TOP+RISE*.42,0);r.rotation.y=PI/2});
+  /* halo chaud sur la neige devant la maison */
+  {const tx=cvT(256,128,(x,w,h)=>{const g=x.createRadialGradient(w/2,h*.25,4,w/2,h*.25,w*.5);g.addColorStop(0,"rgba(255,170,80,.75)");g.addColorStop(.45,"rgba(255,130,50,.25)");g.addColorStop(1,"rgba(255,120,40,0)");x.fillStyle=g;x.fillRect(0,0,w,h)});
+   const pl=new T3.Mesh(new T3.PlaneGeometry(W+3,3.4),new T3.MeshBasicMaterial({map:tx,transparent:true,depthWrite:false,blending:T3.AdditiveBlending}));pl.rotation.x=-PI/2;pl.position.set(0,.04,D/2+1.75);pl.renderOrder=2;Hd.add(pl)}}
  lueurs(Hs,L,1.25);fusion(Hs,[Hs]);
  /* place : bonshommes de neige, sapins, cadeaux */
  const P=new T3.Group();P.position.set(0,0,HZ);dehors.add(P);const LP2=[];
@@ -866,10 +895,10 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
     if(tu<1){const a=tu;tu=Math.min(1,tu+dt/1500);const x=tu;tm.position.y=tm.userData.y0+(x<.45?Math.abs(Math.sin(x*21))*.3:-(x-.45)*3);tm.rotation.z=x<.45?Math.sin(x*30)*.18:0;if(tu>=1){ci=(ci+1+Math.floor(Math.random()*(CT.length-1)))%CT.length;place();tb=t}}
     else{const f=(t-tb)%6200;tm.position.y=tm.userData.y0+(calme?0:f<700?-.35*(1-f/700):f>4800&&f<5900?-.3*Math.sin((f-4800)/1100*PI):0);tm.rotation.z=0}}}
   /* ===== V2 : la hotte de la classe, un paquet par cadeau prêt ===== */
-  {const cols=[0xc8102e,0x33418f,0xd9a441,0x2f6b3f,0xf3e6d0,0x8a5fd0],pos=[],G=new T3.Group();G.position.set(1.6,0,HZ+2.5);dehors.add(G);
+  {const cols=[0xc8102e,0x33418f,0xd9a441,0x2f6b3f,0xf3e6d0,0x8a5fd0],pos=[],G=new T3.Group(),PX=-1.55,PZ=2.15;G.position.set(PX,0,PZ);dehors.add(G);
    for(let i=0;i<4;i++)for(let j=0;j<3;j++)pos.push([(i-1.5)*.3,.13,(j-1)*.3]);for(let i=0;i<2;i++)for(let j=0;j<2;j++)pos.push([(i-.5)*.3+.02,.39,(j-.5)*.3]);pos.push([-.12,.65,0],[.16,.65,.02]);
    const box=new T3.BoxGeometry(.26,.26,.26),rub=new T3.BoxGeometry(.27,.27,.05),rub2=new T3.BoxGeometry(.05,.27,.27),noe=new T3.TorusGeometry(.05,.016,6,12);
-   const P2=pos.map(([x,y,z],i)=>{const g=new T3.Group();g.position.set(x,alt(1.6+x,HZ+2.5+z)+y-.02,z);g.rotation.y=(i*1.7)%1-.5;add(g,box,M(cols[i%6],.5),0,0,0);add(g,rub,orM,0,0,0,0);add(g,rub2,orM,0,0,0,0);[-1,1].forEach(e=>{const k=add(g,noe,orM,e*.04,.15,0,0);k.rotation.z=e*.6});g.scale.setScalar(.001);g.userData={k:0};G.add(g);return g});
+   const P2=pos.map(([x,y,z],i)=>{const g=new T3.Group();g.position.set(x,alt(PX+x,PZ+z)+y-.02,z);g.rotation.y=(i*1.7)%1-.5;add(g,box,M(cols[i%6],.5),0,0,0);add(g,rub,orM,0,0,0,0);add(g,rub2,orM,0,0,0,0);[-1,1].forEach(e=>{const k=add(g,noe,orM,e*.04,.15,0,0);k.rotation.z=e*.6});g.scale.setScalar(.001);g.userData={k:0};G.add(g);return g});
    let hn=0;CAL.hotte=n=>{hn=Math.max(0,Math.min(P2.length,n))};
    CAL.tickHotte=dt=>{P2.forEach((g,i)=>{const u=g.userData,c=i<hn?1:0;if(u.k===c&&u.k!==0&&u.done)return;u.k+=(c-u.k)*Math.min(1,dt/(c?260:400));const x=u.k,e=c?1+Math.sin(Math.min(1,x)*PI)*.25:x;g.scale.setScalar(Math.max(.001,x*e));u.done=Math.abs(c-u.k)<.002})}}
   /* ===== V2 : village agrandi (maisons, lampadaires, sapins) ===== */
@@ -967,7 +996,7 @@ function image(t){requestAnimationFrame(image);if(document.hidden)return;const d
  }else if(cam.fov!==32&&!(CAL.k>.001)){cam.fov=32;cam.updateProjectionMatrix();taille()}
  CAL.k=calme?(CAL.on?1:0):clamp((CAL.k||0)+(CAL.on?1:-1)*dt/(CAL.on?2200:1500));
  if(CAL.k>.001){const k=doux(CAL.k),port=cam.aspect<.8,fv=port?44:34,t=Math.tan(fv*PI/360),dist=Math.max((CAL.H+(port?1.6:5.6))/2/t,(CAL.W+(port?2.7:5))/2/(t*cam.aspect)),c=CAL.cible,pq=cam.quaternion.clone(),p0=cam.position.clone();
-  const P0=V(c.x+Math.sin(tps.value*.12)*.18+(CAL.ox||0),c.y+.35+Math.sin(tps.value*.09)*.08-(port?1.1:1.3),c.z+dist),L0=V(c.x+(CAL.ox||0)*.6,c.y-(port?1.1:1.3),c.z);CAL.fk=(CAL.fk||0)+((CAL.f?1:0)-(CAL.fk||0))*(calme?1:Math.min(1,dt/650));if(CAL.f)CAL.fz=CAL.f;if(CAL.fk>.001&&CAL.fz){const f=CAL.fz,e=doux(CAL.fk),wx=f.x,wy=HY+f.y,wz=HZ+f.z,ox=port?0:1.55,oy=port?-.78:-.05;P0.lerp(V(wx+ox+Math.sin(tps.value*.12)*.05,wy+oy+.15,wz+(port?4.4:5.6)),e);L0.lerp(V(wx+ox,wy+oy,wz),e)}cam.position.copy(P0);cam.lookAt(L0);const q1=cam.quaternion.clone();cam.position.lerpVectors(p0,cam.position.clone(),k);cam.position.y+=Math.sin(CAL.k*PI)*(CAL.on?4.5:2);cam.quaternion.copy(pq).slerp(q1,k);
+  const lat=!port&&cam.aspect>1.3&&innerWidth>=900,ox=(CAL.ox||0)+(lat?-.24*dist*t*cam.aspect:0),P0=V(c.x+Math.sin(tps.value*.12)*.18+ox,c.y+.35+Math.sin(tps.value*.09)*.08-(port?1.1:1.3),c.z+dist),L0=V(c.x+ox,c.y-(port?1.1:1.3),c.z);CAL.fk=(CAL.fk||0)+((CAL.f?1:0)-(CAL.fk||0))*(calme?1:Math.min(1,dt/650));if(CAL.f)CAL.fz=CAL.f;if(CAL.fk>.001&&CAL.fz){const f=CAL.fz,e=doux(CAL.fk),wx=f.x,wy=HY+f.y,wz=HZ+f.z,ox=port?0:1.55,oy=port?-.78:-.05;P0.lerp(V(wx+ox+Math.sin(tps.value*.12)*.05,wy+oy+.15,wz+(port?4.4:5.6)),e);L0.lerp(V(wx+ox,wy+oy,wz),e)}cam.position.copy(P0);cam.lookAt(L0);const q1=cam.quaternion.clone();cam.position.lerpVectors(p0,cam.position.clone(),k);cam.position.y+=Math.sin(CAL.k*PI)*(CAL.on?4.5:2);cam.quaternion.copy(pq).slerp(q1,k);
   if(Math.abs(cam.fov-fv)>.01){cam.fov=fv;cam.updateProjectionMatrix();hPx.value=Hh*dpr/(2*t)}flocs.position.set(0,k>.5?HY:0,k>.5?HZ+4:0)}else if(X.k>.3){const far=cam.position.z<-13;flocs.position.set(0,far?HY:0,far?HZ+4:0)}else if(flocs.position.z!==0)flocs.position.set(0,0,0)
  CAL.tick&&CAL.tick(dt,t);const angC=X.k>.3?Math.atan2(cam.position.x,cam.position.z):vu.a;if(X.k>.3){etoile.rotation.y=angC;perso.rotation.y=Math.atan2(cam.position.x-perso.position.x,cam.position.z-perso.position.z)}R.render(S,cam);
 const ds=Math.min(.04,dt/1000);for(const o of POP){const d=o.userData;if(d.l<=0)continue;d.l-=ds;d.v.y-=9.5*ds;o.position.addScaledVector(d.v,ds);o.rotation.x+=d.w.x*ds;o.rotation.y+=d.w.y*ds;const so=alt(o.position.x,o.position.z)+.07;if(o.position.y<so&&d.v.y<0){o.position.y=so;d.v.y*=-.48;d.v.x*=.7;d.v.z*=.7;d.w.multiplyScalar(.6)}o.scale.setScalar(Math.min(1,(4.2-d.l)*7)*Math.min(1,d.l*2.2));if(d.l<=0)o.visible=false}
@@ -1093,14 +1122,14 @@ etiquettes();maj();setInterval(maj,30000);
   async envoyer(d){if(this.demo)return{ok:true};const r=await fetch(CONFIG.club,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({club:1,sid,...d})});return r.json()}};
  let E={prets:0,enLigne:1,boules:0,podium:[]};
  const CADC=["#d81e3a","#2f6fd6","#f0c25a","#3a8f5c","#8a5fd0","#f58fb4"],cadSvg='<svg viewBox="0 0 24 30" aria-hidden="true"><path class="fl" d="M12 0v8"/><rect class="bx" x="3" y="13" width="18" height="15" rx="2"/><rect class="cv" x="2" y="10" width="20" height="5" rx="1.5"/><path class="rb" d="M12 10v18M12 10c-2-4-6-4-6-1.5S10 10 12 10c2 0 6 1 6-1.5S14 6 12 10"/></svg>';
- const peindreClub=()=>{const n=Math.min(TOTAL,E.prets),g=$("gCad"),par=innerWidth<560?9:TOTAL;if(g.childElementCount!==TOTAL||g.dataset.p!=par){g.dataset.p=par;g.style.setProperty("--n",par);g.innerHTML="";for(let i=0;i<TOTAL;i++){const t=((i%par)+.5)/par,c=document.createElement("i");c.style.setProperty("--y",(4*t*(1-t)*12).toFixed(1)+"px");c.style.setProperty("--c",CADC[i%6]);c.style.setProperty("--k",i);c.innerHTML=cadSvg;g.append(c)}}
+ const peindreClub=()=>{const n=Math.min(TOTAL,E.prets),g=$("gCad"),par=TOTAL;if(g.childElementCount!==TOTAL||g.dataset.p!=par){g.dataset.p=par;g.style.setProperty("--n",par);g.innerHTML="";for(let i=0;i<TOTAL;i++){const t=((i%par)+.5)/par,c=document.createElement("i");c.style.setProperty("--y",(4*t*(1-t)*12).toFixed(1)+"px");c.style.setProperty("--c",CADC[i%6]);c.style.setProperty("--k",i);c.innerHTML=cadSvg;g.append(c)}}
   [...g.children].forEach((c,i)=>{const on=i<n;if(on&&!c.classList.contains("on")&&g.dataset.vu){c.animate([{transform:"translateY(-30px) scale(.4)"},{transform:"translateY(var(--y)) scale(1.25)"},{transform:"translateY(var(--y))"}],{duration:650,easing:"cubic-bezier(.2,1.5,.4,1)"})}c.classList.toggle("on",on)});g.dataset.vu=1;
   $("hT").innerHTML='<b>'+n+'</b> cadeau'+(n>1?'x':'')+' dans la hotte sur '+TOTAL+(ls.get("cadeau",null)?'':' <u>Le tien ?</u>');C.hotte(n);
   {const bo=$("bonnets"),k=Math.min(5,E.enLigne);if(bo.childElementCount!==k){bo.innerHTML="";for(let i=0;i<k;i++){const e=document.createElement("i");e.style.setProperty("--c",CADC[(i*2)%6]);e.style.setProperty("--k",i);e.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15.5" class="fd"/><path class="bn" d="M7 22c1-7 5-13 12-15 3-1 6 0 7 2-3 0-5 2-6 5l-1 8z"/><circle class="pp" cx="27" cy="9" r="2.6"/><rect class="br" x="5.5" y="20.5" width="17" height="4.5" rx="2.2"/></svg>';bo.append(e)}}}
   $("enL").textContent=E.enLigne>1?E.enLigne+" lutins dans le village":"1 lutin dans le village";C.neige=.4+.6*Math.min(1,E.enLigne/8);$("bN").textContent=E.boules.toLocaleString("fr-FR")};
  const rafraichir=async()=>{try{const r=await Club.etat();if(r&&r.ok){E=r;peindreClub()}}catch(_){}};
  /* la jauge, sous le titre du chalet */
- {const h=document.createElement("button");h.type="button";h.className="hotte";h.id="hotte";h.innerHTML='<span class="gCad" id="gCad"></span><span class="hT" id="hT"></span>';$("calS").after(h);
+ {const h=document.createElement("button");h.type="button";h.className="hotte";h.id="hotte";h.innerHTML='<span class="gCad" id="gCad"></span><span class="hT" id="hT"></span>';$("compte").after(h);h.classList.add("auPied");
   const pres=document.createElement("p");pres.className="enLigne";pres.innerHTML='<span class="bonnets" id="bonnets"></span><i class="pt" aria-hidden="true"></i><span id="enL"></span>';document.body.append(pres);
   const bo=document.createElement("button");bo.type="button";bo.className="compteurB";bo.id="compteurB";bo.hidden=!ls.get("mesBoules",0);bo.innerHTML=svg(ICON.flocon)+'<b id="bN">0</b>';bo.setAttribute("aria-label","Le classement des boules de neige");document.body.append(bo)}
  const choixNom=(id,txt0,sauf)=>'<select id="'+id+'"><option value="">'+txt0+'</option>'+CONFIG.noms.filter(n=>n!==sauf).map(n=>'<option>'+txt(n)+'</option>').join("")+'</select>';
@@ -1154,7 +1183,7 @@ etiquettes();maj();setInterval(maj,30000);
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.b;fermerF();setTimeout(()=>$(id).click(),60)});ouvrirF(el)};
 
  /* l'enveloppe du rendez-vous s'accroche au sapin, un seul bouton pour le village (au chalet) */
- {const r=document.querySelector(".rdv"),S2=document.createElement("section");S2.className="rdvS";S2.id="rdvS";$("final").after(S2);if(r){S2.append(r);r.classList.add("auSapin")}$("explorer").hidden=true;$("inscription").hidden=true}
+ {const r=document.querySelector(".rdv"),S2=document.createElement("section");S2.className="rdvS";S2.id="rdvS";$("chaletS").before(S2);if(r){S2.append(r);r.classList.add("auSapin")}$("explorer").hidden=true;$("inscription").hidden=true}
  /* parcours : on descend, le chalet arrive après le village, puis la page continue (rendez-vous, sapin, FAQ) */
  let mode=false;const sec=$("chaletS");
  const allumer=()=>{if(mode)return;mode=true;document.documentElement.classList.add("chaletOn");ui.hidden=false;C.on=true;statut();if(JOUR>=17&&!ls.get("gag",0)){ls.set("gag",1);setTimeout(()=>bulle("Il est coincé dans la cheminée. Encore.",innerWidth*.62,innerHeight*.18),2600)}};

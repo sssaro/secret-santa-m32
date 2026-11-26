@@ -329,7 +329,7 @@ const SOIREE=()=>+new Date(CONFIG.rdv&&CONFIG.rdv.quand||CONFIG.soiree);
 const ICO={map:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',cal:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>'};
 function etatClos(){if(ferme)return;ferme=true;$("avant").hidden=false;$("chrono").setAttribute("aria-label","Temps avant la soirée du 16 décembre");
  const r=CONFIG.rdv,txt=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
- $("zone").innerHTML='<div class="rdv"><h2>Rendez-vous<br>le 16 décembre</h2><p class="clos">Les mails sont partis. Ton nom tiré t\'attend dans ta boîte, ou dans les spams, entre le prince et le loto.</p>'+
+ $("zone").innerHTML='<div class="rdv"><h2>Rendez-vous<br>le 16 décembre</h2><p class="clos">Les mails sont partis. Le nom que tu as tiré t\'attend dans ta boîte mail. Pense à regarder dans les spams.</p>'+
  '<div class="pli" id="pli"><div class="dosE"></div><div class="face">'+
  '<span class="timbre"><svg viewBox="0 0 40 50" aria-hidden="true"><circle cx="9" cy="9" r="1" fill="#fff"/><circle cx="31" cy="14" r="1.2" fill="#fff"/><circle cx="21" cy="6" r=".8" fill="#fff"/><path d="M20 10l9 13h-5l7 10h-6l7 10H8l7-10H9l7-10h-5z" fill="#fff"/><rect x="18" y="43" width="4" height="5" fill="#f5b3bd"/></svg></span>'+
  '<svg class="tampon" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="1.5"/><path id="arcT" d="M15 50a35 35 0 0 1 70 0" fill="none"/><text font-family="Unbounded,Arial Black" font-weight="800" font-size="11" fill="currentColor"><textPath href="#arcT" startOffset="50%" text-anchor="middle">PÔLE NORD</textPath></text><text x="50" y="58" text-anchor="middle" font-family="Unbounded,Arial Black" font-weight="900" font-size="15" fill="currentColor">16.12</text><path d="M-10 78q15-8 30 0t30 0 30 0 30 0" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M-10 87q15-8 30 0t30 0 30 0 30 0" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'+
@@ -916,7 +916,7 @@ function confettis(X=fw/2,Y=fh*.5,N=190){if(calme)return;for(let i=0;i<N;i++){co
 function cf(){fx.clearRect(0,0,fw,fh);conf=conf.filter(q=>q.l-->0);for(const q of conf){q.vy+=.2;q.vx*=.985;q.vy*=.985;q.x+=q.vx;q.y+=q.vy;q.w+=q.dw;fx.save();fx.translate(q.x,q.y);fx.rotate(q.w);fx.globalAlpha=Math.min(1,q.l/40);fx.fillStyle=q.c;if(q.e){fx.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5,z=i%2?q.r*.45:q.r*1.2;fx.lineTo(Math.cos(a)*z,Math.sin(a)*z)}fx.fill()}else{fx.scale(Math.cos(q.w*2),1);fx.fillRect(-q.r/2,-q.r,q.r,q.r*1.6)}fx.restore()}if(conf.length)requestAnimationFrame(cf);else{tourne=false;fx.clearRect(0,0,fw,fh)}}
 /* mot de fin : le faux tirage */
 {const b=$("rN"),r=$("rouleau"),rate=["Bien essayé","Encore raté","Toujours non","Quelle ténacité","Va bosser","Jeudi, 17 h","J'appelle Sara"];let n=0,occ=false;
-if(clos()){$("fT").textContent="Les mails sont partis";$("fP").textContent="Le nom de la personne que tu as tirée est dans ta boîte mail. Rien ? Regarde dans les spams, entre le prince et le loto."}
+if(clos()){$("fT").textContent="Les mails sont partis";$("fP").textContent="Le nom de la personne que tu as tirée est dans ta boîte mail. Rien ? Regarde dans les spams."}
 const mot=t=>{b.textContent=t;b.classList.toggle("long",t.length>8);};
 r.onclick=async()=>{if(occ)return;occ=true;r.classList.add("tourne");const l=[...CONFIG.noms].sort(()=>Math.random()-.5);
 if(!calme)for(let i=0;i<20;i++){mot(l[i%l.length]);const d=48+Math.pow(i/19,3)*290;await b.animate([{transform:"translateY(105%)"},{transform:"none",offset:.45},{transform:"none",offset:.6},{transform:"translateY(-105%)"}],{duration:d}).finished;}
@@ -1050,7 +1050,7 @@ etiquettes();maj();setInterval(maj,30000);
  addEventListener("scroll",suivre,{passive:true});addEventListener("resize",suivre);setTimeout(suivre,300);
  $("calRetour").onclick=()=>{eteindre();defile(0,3200,true)};$("calRetour").setAttribute("aria-label","Remonter à la boule");
  $("calVillage").onclick=()=>{fermerF();ui.hidden=true;C.on=false;Monde.explorer(true)};C.retour=()=>{if(mode){ui.hidden=false;C.on=true}};
- $("non").onclick=()=>{$("qT").textContent="Regarde dans tes spams.";$("qP").textContent="Entre le prince et le loto. Toujours rien ? Écris à Sara.";$("non").hidden=true;$("oui").textContent="Trouvé !"};
+ $("non").onclick=()=>{$("qT").textContent="Regarde dans tes spams.";$("qP").textContent="Toujours rien ? Écris à Sara, elle te le renvoie.";$("non").hidden=true;$("oui").textContent="Trouvé !"};
  $("oui").onclick=()=>{confettis();aller(.47,3200)};
  let px=0,py=0;$("scene").addEventListener("pointerdown",e=>{px=e.clientX;py=e.clientY});$("scene").addEventListener("pointerup",e=>{if(!mode||!C.on||C.k<.8||Math.hypot(e.clientX-px,e.clientY-py)>9)return;C.toucher(e.clientX,e.clientY)});
  setInterval(statut,60000);if(DEMO)window.allumerCal=allumer})();

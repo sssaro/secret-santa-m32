@@ -180,6 +180,23 @@ html.explore,html.explore body{overflow:hidden;overscroll-behavior:none}html.exp
 .tgN{display:block;font:900 27px/1 var(--titre);letter-spacing:-.05em;margin:5px 0 3px;color:#fff3c4;text-shadow:0 2px 0 #7a0a22}
 .tgT{display:block;font:600 10.5px/1.15 var(--texte);font-style:normal;opacity:.85}
 html.explore .jourTag{display:none}
+.hotte{pointer-events:auto;display:grid;justify-items:center;gap:7px;width:min(320px,86vw);margin:2px auto 0}
+.hBar{position:relative;display:block;width:100%;height:12px;border-radius:99px;background:#ffffff26;box-shadow:inset 0 0 0 1.5px #ffffff40}
+.hBar i{position:absolute;inset:0 auto 0 0;border-radius:99px;background:linear-gradient(90deg,#f0c25a,#ffe39a);box-shadow:0 0 14px #f0c25a99;transition:width 1s cubic-bezier(.2,1,.3,1)}
+.hBar svg{position:absolute;right:-10px;top:50%;width:30px;height:30px;translate:0 -50%;fill:var(--cerise);stroke:#fff;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(0 3px 6px #060b2c88)}
+.hT{font:700 14px/1 var(--texte);opacity:.95}
+.hGros{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin:4px 0 14px}.hGros .hBar{height:16px}.hGros b{font:900 22px/1 var(--titre)}
+.jure{position:relative;display:grid;place-items:center;width:132px;height:132px;margin:18px auto 4px;border-radius:50%;background:var(--cerise);box-shadow:inset 0 -5px 0 var(--cerise2),0 14px 34px #7a0a2266;color:#fff;font:900 16px/1.1 var(--titre);touch-action:none;-webkit-user-select:none;user-select:none}
+.jure svg{position:absolute;inset:-9px;width:150px;height:150px;rotate:-90deg}.jure circle{fill:none;stroke:#f0c25a;stroke-width:5;stroke-linecap:round;stroke-dasharray:314;stroke-dashoffset:314}
+.jure:active{transform:scale(.96)}.poste .uN{text-align:center}.pOk{background:#ffffff14;border-radius:14px;padding:12px 14px}
+.poste input{width:100%;font:500 16px/1.4 var(--texte);color:var(--encre);background:#fff;border:0;border-radius:14px;padding:14px}
+.enLigne{position:fixed;z-index:10;right:max(16px,env(safe-area-inset-right,0px));top:calc(150px + env(safe-area-inset-top,0px));margin:0;display:flex;align-items:center;gap:7px;background:#0f1742c4;padding:7px 12px;border-radius:99px;font:700 12px/1 var(--texte);opacity:0;transition:opacity .4s;pointer-events:none}
+.enLigne i{width:8px;height:8px;border-radius:50%;background:#7dffa8;box-shadow:0 0 0 0 #7dffa8;animation:pouls 1.8s infinite}@keyframes pouls{70%{box-shadow:0 0 0 7px #7dffa800}}
+.jourTag.vu~.enLigne,.jourTag.vu+.enLigne{opacity:1}
+.compteurB{position:fixed;z-index:10;left:max(16px,env(safe-area-inset-left,0px));top:calc(80px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:7px;background:#fff;color:var(--encre);padding:9px 14px 9px 11px;border-radius:99px;font:900 15px/1 var(--titre);box-shadow:0 10px 26px #060b2c55}
+.compteurB svg{width:20px;height:20px;fill:none;stroke:#33418f;stroke-width:2.2;stroke-linecap:round}
+.compteurB[hidden]{display:none}.compteurB{opacity:0;pointer-events:none;transition:opacity .4s}.jourTag.vu~.compteurB,html.explore .compteurB{opacity:1;pointer-events:auto}html.explore .compteurB{top:calc(74px + env(safe-area-inset-top,0px))}
+@media(max-width:560px){.calA .pilule{font-size:13px;padding:14px 15px}}
 #feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
 #feuille[hidden]{display:none}
 .fBoite{position:relative;width:min(560px,100%);max-height:60vh;max-height:60svh;overflow:auto;overscroll-behavior:contain;background:#0f1742f2;border-radius:28px 28px 0 0;padding:24px var(--d) max(26px,env(safe-area-inset-bottom,0px)) var(--g);box-shadow:0 -20px 60px #060b2c80;animation:monte .55s cubic-bezier(.2,1,.3,1)}
@@ -249,6 +266,7 @@ const CONFIG={api:"",noms:["Achraf","Arthur","Caroline","Cyrielle","Driss","Eric
  soiree:"2026-12-16T00:00:00+01:00",
  /* Quand on sait : rdv:{lieu:"Nom du lieu",adresse:"12 rue ..., Ville",quand:"2026-12-16T19:30:00+01:00"} */
  rdv:null,
+  club:"",
   liste:"https://script.google.com/macros/s/AKfycbwy9Did1_0j8fOX7aYkMSCwAME8IUDXSZ6BX6zMs0hyPx0mdOw9mHtOo_DZ6EQTUwr1bg/exec",
   /* Fiches du calendrier, dans l'ordre des jours (30 nov, 1er déc, ..., 16 déc), 17 personnes :
   fiches:[{nom:"Achraf",ref:"Sa ref",phrase:"Sa phrase culte"}, ...] */
@@ -730,7 +748,7 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
    CAL.ciel=(cx,cy)=>{if(SL.vol&&!cad.visible){const e=ecran(sg);if(e.z<1&&Math.hypot(e.x-cx,e.y-cy)<Math.max(70,innerWidth*.1)){sg.getWorldPosition(cad.position);CD.v.set((cam.position.x-cad.position.x)*.28,1.6,(cam.position.z-cad.position.z)*.28);CD.pose=false;cad.visible=true;try{navigator.vibrate&&navigator.vibrate(20)}catch(_){}return true}}return false};
    CAL.toucher=(cx,cy)=>{if(CAL.ciel(cx,cy)||(CAL.timo&&CAL.timo(cx,cy)))return true;
     ray.setFromCamera({x:cx/innerWidth*2-1,y:-cy/innerHeight*2+1},cam);const h=ray.intersectObjects([...CAL.fen.map(f=>f.zone),boiteHit],false)[0];if(!h)return CAL.jeu?CAL.jeu(cx,cy):false;if(h.object===boiteHit){CAL.onBoite&&CAL.onBoite();return true}CAL.onFen&&CAL.onFen(h.object.userData.n,cx,cy);return true};
-   CAL.tick=(dt,t)=>{const s=dt/1000;CAL.tickJeu&&CAL.tickJeu(dt,t);CAL.tickTimo&&CAL.tickTimo(dt,t);
+   CAL.tick=(dt,t)=>{const s=dt/1000;CAL.tickJeu&&CAL.tickJeu(dt,t);CAL.tickHotte&&CAL.tickHotte(dt);CAL.tickTimo&&CAL.tickTimo(dt,t);
     for(const f of CAL.fen){if(f.k!==f.kt){const d=f.kt-f.k;f.k+=Math.sign(d)*Math.min(Math.abs(d),s*1.1)}const x=f.k,e=f.kt?1-Math.pow(1-x,3)+Math.sin(x*PI)*.14:x;let sh=0;if(f.sh>0){f.sh=Math.max(0,f.sh-s*1.7);sh=Math.abs(Math.sin(f.sh*38))*.12*f.sh}f.vols[0].rotation.y=-e*1.75-sh;f.vols[1].rotation.y=e*1.75+sh}
     if(halo.visible){const k=.6+.4*Math.sin(t/380);halo.material.opacity=k;halo.scale.setScalar(.92+.1*k);if(CAL.fj)CAL.fj.vols.forEach(pv=>pv.children[0].material[4].emissiveIntensity=.25+.3*k)}
     if(BT.visible&&!calme)jambes.forEach((j,i)=>{j.rotation.x=Math.sin(t/150+i*2.2)*.35;j.rotation.z=Math.sin(t/260+i)*.14});
@@ -777,6 +795,13 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
    CAL.tickTimo=(dt,t)=>{tm.visible=CAL.k>.6||X.k>.6;if(!tm.visible)return;tm.rotation.y=Math.atan2(cam.position.x-tm.position.x,cam.position.z-tm.position.z);
     if(tu<1){const a=tu;tu=Math.min(1,tu+dt/1500);const x=tu;tm.position.y=tm.userData.y0+(x<.45?Math.abs(Math.sin(x*21))*.3:-(x-.45)*3);tm.rotation.z=x<.45?Math.sin(x*30)*.18:0;if(tu>=1){ci=(ci+1+Math.floor(Math.random()*(CT.length-1)))%CT.length;place();tb=t}}
     else{const f=(t-tb)%6200;tm.position.y=tm.userData.y0+(calme?0:f<700?-.35*(1-f/700):f>4800&&f<5900?-.3*Math.sin((f-4800)/1100*PI):0);tm.rotation.z=0}}}
+  /* ===== V2 : la hotte de la classe, un paquet par cadeau prêt ===== */
+  {const cols=[0xc8102e,0x33418f,0xd9a441,0x2f6b3f,0xf3e6d0,0x8a5fd0],pos=[],G=new T3.Group();G.position.set(1.6,0,HZ+2.5);dehors.add(G);
+   for(let i=0;i<4;i++)for(let j=0;j<3;j++)pos.push([(i-1.5)*.3,.13,(j-1)*.3]);for(let i=0;i<2;i++)for(let j=0;j<2;j++)pos.push([(i-.5)*.3+.02,.39,(j-.5)*.3]);pos.push([-.12,.65,0],[.16,.65,.02]);
+   const box=new T3.BoxGeometry(.26,.26,.26),rub=new T3.BoxGeometry(.27,.27,.05),rub2=new T3.BoxGeometry(.05,.27,.27),noe=new T3.TorusGeometry(.05,.016,6,12);
+   const P2=pos.map(([x,y,z],i)=>{const g=new T3.Group();g.position.set(x,alt(1.6+x,HZ+2.5+z)+y-.02,z);g.rotation.y=(i*1.7)%1-.5;add(g,box,M(cols[i%6],.5),0,0,0);add(g,rub,orM,0,0,0,0);add(g,rub2,orM,0,0,0,0);[-1,1].forEach(e=>{const k=add(g,noe,orM,e*.04,.15,0,0);k.rotation.z=e*.6});g.scale.setScalar(.001);g.userData={k:0};G.add(g);return g});
+   let hn=0;CAL.hotte=n=>{hn=Math.max(0,Math.min(P2.length,n))};
+   CAL.tickHotte=dt=>{P2.forEach((g,i)=>{const u=g.userData,c=i<hn?1:0;if(u.k===c&&u.k!==0&&u.done)return;u.k+=(c-u.k)*Math.min(1,dt/(c?260:400));const x=u.k,e=c?1+Math.sin(Math.min(1,x)*PI)*.25:x;g.scale.setScalar(Math.max(.001,x*e));u.done=Math.abs(c-u.k)<.002})}}
   CAL.H=TOP+GR+.5;CAL.W=W;CAL.cible=V(0,HY+CAL.H/2-.1,HZ)}
 fusion(S,CHS);fusion(dehors,CHD);fusion(dehors,REFS.filter(f=>!f.chats).map(f=>f.g));
 let soirK=0;
@@ -843,7 +868,7 @@ function image(t){requestAnimationFrame(image);if(document.hidden)return;const d
  cy=Math.max(cy,dans?alt(Math.sin(a)*r,Math.cos(a)*r)+1.35:0);if(cible){a=zoomA+Math.round((vu.a-zoomA)/6.283)*6.283;r=4.6*K*.82;cy=cible.userData.y+.5;ly=cible.userData.y-.62}
  const e=prem||fl<3||(dans!==seq)?1:cible?.05:.13;vu.a+=(a-vu.a)*e;vu.r+=(r-vu.r)*e;vu.y+=(cy-vu.y)*e;vu.ly+=(ly-vu.ly)*e;prem=false;seq=dans;
  globe.visible=!dans;dehors.visible=dans;S.fog.density=dans?.0125:0;fu.dedans.value=dans?1:0;etoiles.visible=dans;
- fg.setDrawRange(0,Math.round((eco?.45:1)*Math.min(NF,(dans?900:420)+(dans?3300:1500)*Math.pow(force(),1.5)+agit*1900)));
+ fg.setDrawRange(0,Math.round((eco?.45:1)*Math.min(NF,(dans?900:420)+(dans?3300:1500)*Math.pow(force(),1.5)*(CAL.neige==null?1:CAL.neige)+agit*1900)));
  $("givre").style.opacity=clamp(1-Math.abs(p-.1325)/.032)*.98;
  ti.style.transform="translateY("+(-p*Hh*.5)+"px) scale("+(1+p*4)+")";ti.style.opacity=clamp(1-p*13);ti.style.visibility=p>.085?"hidden":"";$("accueil").style.opacity=clamp(1-p*16);
  mots.forEach((b,j)=>{const c=.285+j*.178,d=Math.abs(p-c),o=doux((.084-d)/.024);b.style.opacity=q>0?0:o;b.style.visibility=o>.02&&q<=0&&dans?"visible":"hidden";b.style.transform="translateY("+(p<c?1:-1)*(1-o)*28+"px)"});
@@ -920,7 +945,7 @@ etiquettes();maj();setInterval(maj,30000);
  const ICON={coeur:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',rire:'<circle cx="12" cy="12" r="8.5"/><path d="M8 13.5c1 2 2.4 3 4 3s3-1 4-3"/><path d="M9 9.5h.01M15 9.5h.01"/>',flocon:'<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="M10 4.5l2 1.8 2-1.8M10 19.5l2-1.8 2 1.8"/>',feu:'<path d="M12 21c3.6 0 6-2.4 6-5.6 0-4-3.4-5.6-3.4-9.4C12 7.4 10.6 9.6 11 12c-1.4-.8-2-2.2-2-3.4C7 10.2 6 12.6 6 15.4 6 18.6 8.4 21 12 21z"/>'};
  const svg=p=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>';
  /* interface */
- const ui=document.createElement("div");ui.id="cal";ui.hidden=true;ui.innerHTML='<div class="calHaut"><button type="button" class="rond" id="calRetour" aria-label="Revenir à la boule">'+svg('<path d="M14.5 5.5L8 12l6.5 6.5"/>')+'</button></div><div class="calBas"><h2 class="calT">Le calendrier <br>des M32</h2><p class="calS" id="calS"></p><div class="calA"><button type="button" class="pilule rouge" id="bAwards" hidden>Les M32 Awards</button><button type="button" class="pilule" id="calVillage">Balade en luge</button><button type="button" class="pilule" id="bRdv">Le rendez-vous</button><button type="button" class="pilule" id="bBoite">La boîte aux lettres</button></div></div><p class="calBulle" id="calBulle" role="status"></p>';
+ const ui=document.createElement("div");ui.id="cal";ui.hidden=true;ui.innerHTML='<div class="calHaut"><button type="button" class="rond" id="calRetour" aria-label="Revenir à la boule">'+svg('<path d="M14.5 5.5L8 12l6.5 6.5"/>')+'</button></div><div class="calBas"><h2 class="calT">Le calendrier <br>des M32</h2><p class="calS" id="calS"></p><div class="calA"><button type="button" class="pilule rouge" id="bAwards" hidden>Les M32 Awards</button><button type="button" class="pilule" id="calVillage">Balade en luge</button><button type="button" class="pilule" id="bPari">Qui est mon Santa ?</button><button type="button" class="pilule" id="bRdv">Le rendez-vous</button><button type="button" class="pilule" id="bBoite">La boîte aux lettres</button></div></div><p class="calBulle" id="calBulle" role="status"></p>';
  document.body.append(ui);
  const F=document.createElement("div");F.id="feuille";F.hidden=true;F.innerHTML='<div class="fBoite" role="dialog" aria-modal="true" aria-label="Détail"><button type="button" class="fX" id="fX" aria-label="Fermer">'+svg('<path d="M6 6l12 12M18 6L6 18"/>')+'</button><div id="fC"></div></div>';document.body.append(F);
  const $c=$("fC"),bul=$("calBulle");let tb;
@@ -964,7 +989,7 @@ etiquettes();maj();setInterval(maj,30000);
  const boite=()=>{const el=document.createElement("form");el.className="poste";el.noValidate=true;el.innerHTML='<h3>La boîte aux lettres du Père Noël</h3><p>Glisse un indice anonyme à la personne que tu as tirée. Sara lit chaque lettre avant qu\'elle arrive.</p><label for="pPour">Pour</label><select id="pPour"><option value="">Choisis un prénom</option>'+CONFIG.noms.map(n=>'<option>'+txt(n)+'</option>').join("")+'</select><label for="pMot">Ton indice</label><textarea id="pMot" maxlength="180" rows="4" placeholder="Ton lutin aime le chocolat chaud et les dossiers rendus à 23 h 59."></textarea><p class="pErr" id="pErr" role="alert"></p><button class="cta" type="submit">Poster la lettre</button>';
   el.onsubmit=e=>{e.preventDefault();const p=$("pPour").value,m=$("pMot").value.trim();if(!p)return $("pErr").textContent="Choisis à qui tu écris.";if(m.length<4)return $("pErr").textContent="Ton indice est un peu court.";
    C.poster();fermerF();setTimeout(()=>{bulle(DEMO?"Aperçu : la lettre n'est pas envoyée.":"Lettre postée. Sara la lit avant de la livrer.",innerWidth/2,innerHeight*.55);confettis(innerWidth/2,innerHeight*.55,50)},300)};return el};
- C.onBoite=()=>{if(F.hidden)ouvrirF(boite())};$("bBoite").onclick=()=>ouvrirF(boite());
+ C.onBoite=()=>{if(F.hidden)ouvrirF(boite())};$("bBoite").onclick=()=>ouvrirF(boite());$("bPari").onclick=()=>ouvrirF(feuillePari());
  $("bRdv").onclick=()=>{const r=document.querySelector(".rdv");if(r){ouvrirF(r)}};
  /* M32 Awards, le 18 */
  $("bAwards").onclick=()=>{const L=FICHES.map((f,i)=>{const n=i+1,s=sondage(n),v=resultat(n);let b=0;v.forEach((x,k)=>{if(x>v[b])b=k});return'<li><span class="aJ">'+LABJ(n)+'</span><b>'+txt(s.o[b])+'</b><span>'+txt(s.q.replace(/ :$/,""))+'</span></li>'}).join("");
@@ -974,6 +999,49 @@ etiquettes();maj();setInterval(maj,30000);
  {const tg=document.createElement("div");tg.className="jourTag";tg.setAttribute("role","note");tg.innerHTML='<svg class="tgFil" viewBox="0 0 10 60" aria-hidden="true"><path d="M5 0v60"/></svg><svg class="tgHoux" viewBox="0 0 64 40" aria-hidden="true"><path class="f" d="M31 22C25 13 15 9 3 11c4 3 2 6 5 8-3 2-2 5-5 7 4 1 6 4 6 7 9 1 17-2 22-11z"/><path class="f" d="M33 22c6-9 16-13 28-11-4 3-2 6-5 8 3 2 2 5 5 7-4 1-6 4-6 7-9 1-17-2-22-11z"/><path class="n" d="M31 22C24 18 14 17 6 19M33 22c7-4 17-5 25-3"/><circle cx="27.5" cy="23" r="5.2"/><circle cx="36.5" cy="23" r="5.2"/><circle cx="32" cy="30" r="5.2"/><circle class="b" cx="26" cy="21.4" r="1.4"/><circle class="b" cx="35" cy="21.4" r="1.4"/><circle class="b" cx="30.5" cy="28.4" r="1.4"/></svg><div class="tgC"><span class="tgD" id="tgD"></span><b class="tgN" id="tgN"></b><i class="tgT">avant la soirée</i></div>';document.body.append(tg);
   const ref=()=>JOUR>=1&&JOUR<=17&&DEMO&&/jour=/.test(location.hash)?(JOUR===1?new Date(2026,10,30,12):new Date(2026,11,JOUR-1,12)):new Date(),maj=()=>{const d=ref(),f=new Date(SOIREE());f.setHours(0,0,0,0);const a=new Date(d);a.setHours(0,0,0,0);const j=Math.round((f-a)/864e5);$("tgD").textContent=d.toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"");$("tgN").textContent=j>0?"J-"+j:j===0?"Jour J":"Joyeux Noël";tg.querySelector(".tgT").textContent=j>0?(j>1?"avant la soirée":"veille de soirée"):j===0?"c'est ce soir":"à l'an prochain";tg.setAttribute("aria-label","Aujourd'hui "+$("tgD").textContent+", "+$("tgN").textContent)};maj();setInterval(maj,60000);
   const voir=()=>{const on=clos()&&scrollY>innerHeight*.6&&!Monde.X.on;tg.classList.toggle("vu",on)};addEventListener("scroll",voir,{passive:true});setInterval(voir,500);voir()}
+ /* ===== le QG de la classe : hotte, paris, neige partagée, concours de boules ===== */
+ const TOTAL=CONFIG.noms.length,sid=ls.get("sid",null)||(()=>{const v=Math.random().toString(36).slice(2,12);ls.set("sid",v);return v})();
+ const Club={demo:DEMO||!CONFIG.club,
+  async etat(){if(this.demo){const r=graine(7),moi=ls.get("cadeau",null),b=ls.get("mesBoules",0),lu=ls.get("lutin","");const pod=[["Biscotte de Minuit",412],["Grelot du Grenier",388],["Praline en Cavale",251],["Flocon du Placard",190],["Moufle sous la Neige",133]];if(lu){const k=pod.find(p=>p[0]===lu);if(k)k[1]+=b;else pod.push([lu,b])}pod.sort((a,b)=>b[1]-a[1]);return{ok:true,prets:9+(moi?1:0),enLigne:3+Math.floor(Math.random()*5),boules:1840+b,podium:pod.slice(0,5)}}
+   const r=await fetch(CONFIG.club+"?club=1&sid="+encodeURIComponent(sid));return r.json()},
+  async envoyer(d){if(this.demo)return{ok:true};const r=await fetch(CONFIG.club,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({club:1,sid,...d})});return r.json()}};
+ let E={prets:0,enLigne:1,boules:0,podium:[]};
+ const peindreClub=()=>{const n=Math.min(TOTAL,E.prets);$("hT").textContent=n+" / "+TOTAL+" cadeaux dans la hotte";$("hB").style.width=(n/TOTAL*100)+"%";C.hotte(n);
+  $("enL").textContent=E.enLigne>1?E.enLigne+" lutins en ligne":"1 lutin en ligne";C.neige=.4+.6*Math.min(1,E.enLigne/8);$("bN").textContent=E.boules.toLocaleString("fr-FR")};
+ const rafraichir=async()=>{try{const r=await Club.etat();if(r&&r.ok){E=r;peindreClub()}}catch(_){}};
+ /* la jauge, sous le titre du chalet */
+ {const h=document.createElement("button");h.type="button";h.className="hotte";h.id="hotte";h.innerHTML='<span class="hBar"><i id="hB"></i><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1"/></svg></span><span class="hT" id="hT"></span>';$("calS").after(h);
+  const pres=document.createElement("p");pres.className="enLigne";pres.innerHTML='<i></i><span id="enL"></span>';document.body.append(pres);
+  const bo=document.createElement("button");bo.type="button";bo.className="compteurB";bo.id="compteurB";bo.hidden=!ls.get("mesBoules",0);bo.innerHTML=svg(ICON.flocon)+'<b id="bN">0</b>';bo.setAttribute("aria-label","Le classement des boules de neige");document.body.append(bo)}
+ const choixNom=(id,txt0,sauf)=>'<select id="'+id+'"><option value="">'+txt0+'</option>'+CONFIG.noms.filter(n=>n!==sauf).map(n=>'<option>'+txt(n)+'</option>').join("")+'</select>';
+ /* 1. la hotte : on jure, doigt appuyé */
+ const feuilleHotte=()=>{const deja=ls.get("cadeau",null),el=document.createElement("div");el.className="poste";
+  el.innerHTML='<h3>La hotte des M32</h3><p>'+(deja?'Juré, craché, '+txt(deja)+'. Ton cadeau est dans la hotte.':'Ton cadeau est acheté et emballé ? Dis-le à la classe : un paquet de plus tombe devant le chalet.')+'</p><div class="hGros"><span class="hBar"><i style="width:'+(Math.min(TOTAL,E.prets)/TOTAL*100)+'%"></i></span><b>'+Math.min(TOTAL,E.prets)+' / '+TOTAL+'</b></div>'+
+   (deja?'':'<label for="hNom">Tu es</label>'+choixNom("hNom","Choisis ton prénom")+'<button type="button" class="jure" id="jure"><svg viewBox="0 0 116 116" aria-hidden="true"><circle cx="58" cy="58" r="50" pathLength="314"/></svg><span>Je le jure</span></button><p class="uN">Garde le doigt appuyé sur le bouton.</p>')+'<p class="pErr" id="hErr" role="alert"></p>';
+  if(!deja){const b=el.querySelector("#jure"),c=b.querySelector("circle");let h=null,t0=0;const stop=()=>{cancelAnimationFrame(h);h=null;c.style.strokeDashoffset=314},
+   fin=async()=>{stop();const n=$("hNom").value;ls.set("cadeau",n);E.prets++;peindreClub();try{await Club.envoyer({type:"cadeau",prenom:n})}catch(_){}const r=b.getBoundingClientRect();confettis(r.left+r.width/2,r.top,120);try{navigator.vibrate&&navigator.vibrate([20,40,60])}catch(_){}setTimeout(()=>{fermerF();bulle(E.prets>=TOTAL?"La hotte est pleine. Le Père Noël peut partir.":"Un paquet de plus dans la hotte. Merci "+n+" !",innerWidth/2,innerHeight*.45)},700)},
+   boucle=()=>{const k=Math.min(1,(performance.now()-t0)/1100);c.style.strokeDashoffset=314*(1-k);if(k>=1)fin();else h=requestAnimationFrame(boucle)};
+   b.onpointerdown=e=>{e.preventDefault();if(!$("hNom").value){$("hErr").textContent="Choisis d'abord ton prénom.";return}$("hErr").textContent="";t0=performance.now();boucle()};["pointerup","pointerleave","pointercancel"].forEach(v=>b.addEventListener(v,()=>{if(h)stop()}));b.onkeydown=e=>{if((e.key==="Enter"||e.key===" ")&&$("hNom").value){e.preventDefault();fin()}}}
+  return el};
+ $("hotte").onclick=()=>ouvrirF(feuilleHotte());
+ /* 2. qui est mon Santa ? */
+ const feuillePari=()=>{const p=ls.get("pari",null),el=document.createElement("form");el.className="poste";el.noValidate=true;
+  el.innerHTML='<h3>Qui est mon Santa ?</h3><p>Quelqu\'un de la classe te prépare un cadeau. Parie sur son nom. Le 16 au soir, après l\'échange, on élit le Sherlock de la M32.</p>'+(p?'<p class="pOk">Ton pari : <b>'+txt(p.santa)+'</b>. Tu peux encore changer d\'avis.</p>':'')+
+   '<label for="pMoi">Tu es</label>'+choixNom("pMoi","Choisis ton prénom")+'<label for="pSanta">Ton Santa, c\'est</label>'+choixNom("pSanta","Choisis un prénom")+'<p class="pErr" id="pErr2" role="alert"></p><button class="cta" type="submit">'+(p?"Changer mon pari":"Parier")+'</button><p class="uN">Personne ne voit les paris avant le 16, même pas Sara.</p>';
+  if(p){setTimeout(()=>{$("pMoi").value=p.moi;$("pSanta").value=p.santa},0)}
+  el.onsubmit=async e=>{e.preventDefault();const moi=$("pMoi").value,sa=$("pSanta").value;if(!moi||!sa)return $("pErr2").textContent="Choisis les deux prénoms.";if(moi===sa)return $("pErr2").textContent="Tu ne peux pas être ton propre Santa. Bien essayé.";
+   ls.set("pari",{moi,santa:sa});try{await Club.envoyer({type:"pari",prenom:moi,santa:sa})}catch(_){}fermerF();setTimeout(()=>{bulle("Pari enregistré. Réponse le 16 au soir, Sherlock.",innerWidth/2,innerHeight*.45);confettis(innerWidth/2,innerHeight*.45,50)},250)};return el};
+ /* 4. concours de boules de neige */
+ const feuilleBoules=()=>{const el=document.createElement("form");el.className="poste awards";el.noValidate=true;const lu=ls.get("lutin","");
+  el.innerHTML='<h3>Bataille de boules de neige</h3><p>La classe a lancé <b>'+E.boules.toLocaleString("fr-FR")+'</b> boules. Toi : <b>'+ls.get("mesBoules",0)+'</b>.</p><ol>'+E.podium.map((p,i)=>'<li><span class="aJ">'+(i+1)+'</span><b>'+txt(p[0])+'</b><span>'+p[1].toLocaleString("fr-FR")+' boules</span></li>').join("")+'</ol>'+
+   '<label for="lNom">Signe tes boules avec ton nom de lutin</label><input id="lNom" maxlength="40" placeholder="Il est dans ton mail, ex. Biscotte de Minuit" value="'+txt(lu)+'"><button class="cta" type="submit">Signer</button><p class="uN">Les noms de lutins restent anonymes : personne ne sait qui se cache derrière.</p>';
+  el.onsubmit=async e=>{e.preventDefault();const v=$("lNom").value.trim().replace(/\s+/g," ");if(v.length<3)return;ls.set("lutin",v);try{await Club.envoyer({type:"lutin",lutin:v})}catch(_){}await rafraichir();fermerF();bulle("Tes boules portent la signature de "+v+".",innerWidth/2,innerHeight*.45)};return el};
+ $("compteurB").onclick=()=>ouvrirF(feuilleBoules());
+ let envoiB=0,tB=null;const boule=()=>{const m=ls.get("mesBoules",0)+1;ls.set("mesBoules",m);E.boules++;envoiB++;$("compteurB").hidden=false;peindreClub();$("compteurB").animate([{transform:"scale(1.25)"},{transform:"none"}],{duration:380,easing:"cubic-bezier(.2,1.6,.4,1)"});clearTimeout(tB);tB=setTimeout(async()=>{const n=envoiB;envoiB=0;try{await Club.envoyer({type:"boules",n,lutin:ls.get("lutin","")})}catch(_){}},4000);
+  if(m===10||m===50||m===100)setTimeout(()=>bulle(m+" boules ! Signe-les pour entrer au classement.",innerWidth/2,innerHeight*.3),900)};
+ const splatV=C.onSplat;C.onSplat=n=>{boule();splatV(n)};
+ /* 3. la neige partagée : on se signale toutes les 45 s */
+ const ping=async()=>{if(document.hidden)return;try{await Club.envoyer({type:"ping"})}catch(_){}rafraichir()};ping();setInterval(ping,45000);
  /* parcours : on descend, le chalet arrive après le village, puis la page continue (rendez-vous, sapin, FAQ) */
  let mode=false;const sec=$("chaletS");
  const allumer=()=>{if(mode)return;mode=true;ui.hidden=false;C.on=true;statut();if(JOUR>=17&&!ls.get("gag",0)){ls.set("gag",1);setTimeout(()=>bulle("Il est coincé dans la cheminée. Encore.",innerWidth*.62,innerHeight*.18),2600)}};

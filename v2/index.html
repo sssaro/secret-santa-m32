@@ -195,7 +195,7 @@ html.explore .jourTag{display:none}
 .poste input{width:100%;font:500 16px/1.4 var(--texte);color:var(--encre);background:#fff;border:0;border-radius:14px;padding:14px}
 .enLigne{position:fixed;z-index:10;right:max(16px,env(safe-area-inset-right,0px));top:calc(150px + env(safe-area-inset-top,0px));margin:0;display:flex;align-items:center;gap:7px;background:#0f1742c4;padding:7px 12px;border-radius:99px;font:700 12px/1 var(--texte);opacity:0;transition:opacity .4s;pointer-events:none}
 .enLigne>i{width:8px;height:8px;border-radius:50%;background:#7dffa8;box-shadow:0 0 0 0 #7dffa8;animation:pouls 1.8s infinite}@keyframes pouls{70%{box-shadow:0 0 0 7px #7dffa800}}
-.jourTag.vu~.enLigne,.jourTag.vu+.enLigne{opacity:1}
+html.chaletOn .enLigne{opacity:1}
 .compteurB{position:fixed;z-index:10;left:max(16px,env(safe-area-inset-left,0px));top:calc(80px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:7px;background:#fff;color:var(--encre);padding:9px 14px 9px 11px;border-radius:99px;font:900 15px/1 var(--titre);box-shadow:0 10px 26px #060b2c55}
 .compteurB svg{width:20px;height:20px;fill:none;stroke:#33418f;stroke-width:2.2;stroke-linecap:round}
 .compteurB[hidden]{display:none}.compteurB{opacity:0;pointer-events:none;transition:opacity .4s}.jourTag.vu~.compteurB,html.explore .compteurB{opacity:1;pointer-events:auto}html.explore .compteurB{top:calc(74px + env(safe-area-inset-top,0px))}
@@ -239,7 +239,10 @@ html.explore .jourTag{display:none}
 .versChalet.vu{opacity:1;translate:-50% 0;pointer-events:auto}html:not(.explore) .versChalet{display:none}
 .versChalet svg{width:18px;height:18px;fill:#c8102e}
 #pas button{touch-action:none;-webkit-touch-callout:none}
-#feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
+.rdvS{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:90px var(--d) 90px var(--g);pointer-events:none}
+.rdvS::before{content:"";position:absolute;top:0;left:50%;width:3px;margin-left:-1.5px;height:120px;background:linear-gradient(#c8102e00,#c8102e 40%);border-radius:2px}
+.auSapin{pointer-events:none;text-shadow:0 2px 20px #070b2a}.auSapin .pli,.auSapin .actions,.auSapin button,.auSapin a{pointer-events:auto}.auSapin h2{font-size:clamp(34px,9vw,64px)}
+@media(max-width:560px){.final .bloc{padding-top:138px!important}.rdvS{padding-top:150px}}#feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
 #feuille[hidden]{display:none}
 .fBoite{position:relative;width:min(560px,100%);max-height:60vh;max-height:60svh;overflow:auto;overscroll-behavior:contain;background:#0f1742f2;border-radius:28px 28px 0 0;padding:24px var(--d) max(26px,env(safe-area-inset-bottom,0px)) var(--g);box-shadow:0 -20px 60px #060b2c80;animation:monte .55s cubic-bezier(.2,1,.3,1)}
 @keyframes monte{from{transform:translateY(100%)}}
@@ -278,7 +281,7 @@ html.explore .jourTag{display:none}
 <div class="ciel" aria-hidden="true"></div>
 <h1 id="titre" aria-label="Secret Santa des M32"><span aria-hidden="true">SECRET</span><span aria-hidden="true">SANTA</span></h1>
 <canvas id="scene" aria-hidden="true"></canvas>
-<div class="mots"><div class="mot"><b class="q" id="qT">Tu as reçu ton mail ?</b><span id="qP">Le tirage est tombé jeudi à 17 h. Quelqu'un de la classe sait déjà ce qu'il va t'offrir.</span><div class="choix"><button class="cta" id="oui" type="button">Oui !</button><button class="non" id="non" type="button">Non</button></div></div><div class="mot"><b>17 fenêtres</b><span>Du 30 novembre au 16 décembre, une personne de la classe par jour, au chalet.</span></div><div class="mot"><b>Où est Timothée ?</b><span>Il s'est encore caché dans le village. Ouvre l'œil, il passe la tête de temps en temps.</span></div><div class="mot"><b>Le 16 décembre</b><span>Tout le monde se retrouve pour échanger les cadeaux. Continue, le chalet est juste là.</span></div></div><div id="givre" aria-hidden="true"></div><button id="sortir" type="button" hidden>Sortir</button><p id="trouves" hidden>0 / 19</p><div id="pas" hidden role="group" aria-label="Se promener"><button type="button" id="prec" aria-label="Objet précédent"></button><button type="button" id="suiv" aria-label="Objet suivant"></button></div>
+<div class="mots"><div class="mot"><b class="q" id="qT">Tu as reçu ton mail ?</b><span id="qP">Le tirage est tombé jeudi à 17 h. Quelqu'un de la classe sait déjà ce qu'il va t'offrir.</span><div class="choix"><button class="cta" id="oui" type="button">Oui !</button><button class="non" id="non" type="button">Non</button></div></div><div class="mot"><b>17 fenêtres</b><span>Du 30 novembre au 16 décembre, une personne de la classe par jour, au chalet.</span></div><div class="mot"><b>Le 16 décembre</b><span>Tout le monde se retrouve pour échanger les cadeaux. Continue, le chalet est juste là.</span></div></div><div id="givre" aria-hidden="true"></div><button id="sortir" type="button" hidden>Sortir</button><p id="trouves" hidden>0 / 19</p><div id="pas" hidden role="group" aria-label="Se promener"><button type="button" id="prec" aria-label="Objet précédent"></button><button type="button" id="suiv" aria-label="Objet suivant"></button></div>
 <p class="demo" id="demo" hidden>Version 2 en préparation : rien n'est enregistré.</p>
 <main>
 <div class="recit" id="recit"><div class="accueil" id="accueil">
@@ -1149,10 +1152,13 @@ etiquettes();maj();setInterval(maj,30000);
  $("bQG").onclick=()=>{const el=document.createElement("div");el.className="qg";const T=[["bPari","Qui est mon Santa ?","Parie sur la personne qui te gâte.",'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/><path d="M8.5 9a2 2 0 1 1 2.6 1.9c-.6.2-.6.6-.6 1.1M10.5 14h.01"/>'],["hotte","La hotte","Jure que ton cadeau est prêt.",'<rect x="4" y="10" width="16" height="11" rx="1.5"/><path d="M3 10h18M12 10v11M12 10c-2-4-6-4-6-1.5S10 10 12 10c2 0 6 1 6-1.5S14 6 12 10"/>'],["bRepas","La raclette","Qui ramène quoi le 16.",'<path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><path d="M3 15h18M8 19h8M12 4v3"/>'],["bBoite","La boîte aux lettres","Un indice anonyme pour ton tiré.",'<path d="M4 11a4 4 0 0 1 8 0v9H4z"/><path d="M12 11h6a2 2 0 0 1 2 2v7h-8M7 13h2M16 7V3h3"/>'],["compteurB","Les boules de neige","Le classement des lutins.",ICON.flocon]];
   el.innerHTML='<h3>Le QG de la classe</h3><p>Tout ce qui se passe au chalet jusqu\'au 16 décembre.</p><div class="qgG">'+T.map(t=>'<button type="button" data-b="'+t[0]+'">'+svg(t[3])+'<b>'+t[1]+'</b><span>'+t[2]+'</span></button>').join("")+'</div>';
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{const id=b.dataset.b;fermerF();setTimeout(()=>$(id).click(),60)});ouvrirF(el)};
+
+ /* l'enveloppe du rendez-vous s'accroche au sapin, un seul bouton pour le village (au chalet) */
+ {const r=document.querySelector(".rdv"),S2=document.createElement("section");S2.className="rdvS";S2.id="rdvS";$("final").after(S2);if(r){S2.append(r);r.classList.add("auSapin")}$("explorer").hidden=true;$("inscription").hidden=true}
  /* parcours : on descend, le chalet arrive après le village, puis la page continue (rendez-vous, sapin, FAQ) */
  let mode=false;const sec=$("chaletS");
- const allumer=()=>{if(mode)return;mode=true;ui.hidden=false;C.on=true;statut();if(JOUR>=17&&!ls.get("gag",0)){ls.set("gag",1);setTimeout(()=>bulle("Il est coincé dans la cheminée. Encore.",innerWidth*.62,innerHeight*.18),2600)}};
- const eteindre=()=>{if(!mode)return;fermerF();mode=false;C.on=false;ui.hidden=true};
+ const allumer=()=>{if(mode)return;mode=true;document.documentElement.classList.add("chaletOn");ui.hidden=false;C.on=true;statut();if(JOUR>=17&&!ls.get("gag",0)){ls.set("gag",1);setTimeout(()=>bulle("Il est coincé dans la cheminée. Encore.",innerWidth*.62,innerHeight*.18),2600)}};
+ const eteindre=()=>{if(!mode)return;fermerF();mode=false;document.documentElement.classList.remove("chaletOn");C.on=false;ui.hidden=true};
  const suivre=()=>{if(!clos()||Monde.X.on)return;const r=sec.getBoundingClientRect(),dedans=r.top<innerHeight*.25&&r.bottom>innerHeight*.75;if(dedans)allumer();else eteindre()};
  addEventListener("scroll",suivre,{passive:true});addEventListener("resize",suivre);setTimeout(suivre,300);
  $("calRetour").onclick=()=>{eteindre();defile(0,3200,true)};$("calRetour").setAttribute("aria-label","Remonter à la boule");

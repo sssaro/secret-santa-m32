@@ -168,7 +168,7 @@ html.explore,html.explore body{overflow:hidden;overscroll-behavior:none}html.exp
 .calBulle{position:fixed;z-index:11;margin:0;translate:-50% -100%;background:#fff;color:var(--encre);font:700 15px/1.3 var(--texte);padding:12px 16px;border-radius:14px;box-shadow:0 12px 30px #060b2c55;width:max-content;max-width:min(290px,84vw);text-align:center;opacity:0;transform:translateY(8px) scale(.9);transition:opacity .25s,transform .35s cubic-bezier(.2,1.6,.4,1);pointer-events:none}
 .calBulle::after{content:"";position:absolute;left:50%;bottom:-7px;width:14px;height:14px;margin-left:-7px;background:#fff;rotate:45deg}
 .calBulle.vu{opacity:1;transform:none}
-#feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
+.plaf{position:fixed;inset:0;z-index:13;pointer-events:none;display:grid;place-items:center;opacity:0}.plaf svg{width:min(120vw,900px);fill:#fff;filter:drop-shadow(0 6px 20px #8fa6e0)}.plaf.vu{animation:plaf 2.8s cubic-bezier(.2,1,.3,1) both}@keyframes plaf{0%{opacity:0;transform:scale(.3)}8%{opacity:.97;transform:scale(1.05)}14%{transform:none}70%{opacity:.95;transform:translateY(4vh)}100%{opacity:0;transform:translateY(16vh)}}#feuille{position:fixed;inset:0;z-index:12;display:flex;align-items:flex-end;justify-content:center}
 #feuille[hidden]{display:none}
 .fBoite{position:relative;width:min(560px,100%);max-height:60vh;max-height:60svh;overflow:auto;overscroll-behavior:contain;background:#0f1742f2;border-radius:28px 28px 0 0;padding:24px var(--d) max(26px,env(safe-area-inset-bottom,0px)) var(--g);box-shadow:0 -20px 60px #060b2c80;animation:monte .55s cubic-bezier(.2,1,.3,1)}
 @keyframes monte{from{transform:translateY(100%)}}
@@ -624,7 +624,7 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
   add(g,new T3.BoxGeometry(.86,.15,.22),M(0x6b3d22,.8),0,-.06,.15);add(g,new T3.BoxGeometry(.9,.09,.26),neige2,0,.04,.15);
   for(let k=0;k<7;k++){const s2=add(g,new T3.ConeGeometry(.065,.19,6),sapM,-.36+k*.12,.11,.17+((k%2)-.5)*.06);s2.rotation.z=(k%3-1)*.3}
   [-.3,-.1,.1,.3].forEach((q,k)=>L.push([[x+q,y+.12,z+.32],COL[(k+f+b)%4],.28,1+(f*6+b+k)*.7]));
-  const zone=add(g,new T3.PlaneGeometry(BW,FH),hit,0,.42,.2,0);zone.userData.n=n;
+  const zone=add(g,new T3.PlaneGeometry(.98,1.2),hit,0,.42,.2,0);zone.userData.n=n;
   CAL.fen.push({n,g,vit,vols,zone,x,y:y+.42,z,k:0})}
  /* guirlandes en festons sous chaque étage */
  for(let f=1;f<=NF;f++){const y=BASE+f*FH-(f===NF?.12:0),bz=D/2+.16;for(let k=0;k<=48;k++){const t2=k/48,xx=-W/2+t2*W;L.push([[xx,y-Math.abs(Math.sin(t2*PI*6))*.15,bz],COL[(k+f)%5],.28,1+k*.9+f])}}
@@ -692,9 +692,9 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
    CAL.viser=n=>{CAL.f=n==null?null:CAL.fen.find(f=>f.n===n)||null};
    CAL.ecranFen=n=>ecran(CAL.fen.find(f=>f.n===n).vit);
    CAL.poster=()=>{dra.userData.t=1};
-   CAL.toucher=(cx,cy)=>{if(SL.vol&&!cad.visible){const e=ecran(sg);if(e.z<1&&Math.hypot(e.x-cx,e.y-cy)<Math.max(70,innerWidth*.1)){sg.getWorldPosition(cad.position);CD.v.set(-cad.position.x*.4,1.6,1.3);CD.pose=false;cad.visible=true;try{navigator.vibrate&&navigator.vibrate(20)}catch(_){}return true}}
-    ray.setFromCamera({x:cx/innerWidth*2-1,y:-cy/innerHeight*2+1},cam);const h=ray.intersectObjects([...CAL.fen.map(f=>f.zone),boiteHit],false)[0];if(!h)return false;if(h.object===boiteHit){CAL.onBoite&&CAL.onBoite();return true}CAL.onFen&&CAL.onFen(h.object.userData.n,cx,cy);return true};
-   CAL.tick=(dt,t)=>{const s=dt/1000;
+   CAL.toucher=(cx,cy)=>{if(CAL.timo&&CAL.timo(cx,cy))return true;if(SL.vol&&!cad.visible){const e=ecran(sg);if(e.z<1&&Math.hypot(e.x-cx,e.y-cy)<Math.max(70,innerWidth*.1)){sg.getWorldPosition(cad.position);CD.v.set(-cad.position.x*.4,1.6,1.3);CD.pose=false;cad.visible=true;try{navigator.vibrate&&navigator.vibrate(20)}catch(_){}return true}}
+    ray.setFromCamera({x:cx/innerWidth*2-1,y:-cy/innerHeight*2+1},cam);const h=ray.intersectObjects([...CAL.fen.map(f=>f.zone),boiteHit],false)[0];if(!h)return CAL.jeu?CAL.jeu(cx,cy):false;if(h.object===boiteHit){CAL.onBoite&&CAL.onBoite();return true}CAL.onFen&&CAL.onFen(h.object.userData.n,cx,cy);return true};
+   CAL.tick=(dt,t)=>{const s=dt/1000;CAL.tickJeu&&CAL.tickJeu(dt,t);CAL.tickTimo&&CAL.tickTimo(dt,t);
     for(const f of CAL.fen){if(f.k!==f.kt){const d=f.kt-f.k;f.k+=Math.sign(d)*Math.min(Math.abs(d),s*1.1)}const x=f.k,e=f.kt?1-Math.pow(1-x,3)+Math.sin(x*PI)*.14:x;let sh=0;if(f.sh>0){f.sh=Math.max(0,f.sh-s*1.7);sh=Math.abs(Math.sin(f.sh*38))*.12*f.sh}f.vols[0].rotation.y=-e*1.75-sh;f.vols[1].rotation.y=e*1.75+sh}
     if(halo.visible){const k=.6+.4*Math.sin(t/380);halo.material.opacity=k;halo.scale.setScalar(.92+.1*k);if(CAL.fj)CAL.fj.vols.forEach(pv=>pv.children[0].material[4].emissiveIntensity=.25+.3*k)}
     if(BT.visible&&!calme)jambes.forEach((j,i)=>{j.rotation.x=Math.sin(t/150+i*2.2)*.35;j.rotation.z=Math.sin(t/260+i)*.14});
@@ -702,6 +702,40 @@ const HZ=-30,HY=alt(0,HZ)-.05,CAL={fen:[],ouvert:new Set()};
     const vis=CAL.k>.5&&!calme;if(!vis){sg.visible=false;SL.vol=false}else{if(!SL.vol){SL.w-=s;if(SL.w<=0){SL.vol=true;SL.u=0;SL.dir=Math.random()<.5?1:-1}}
      if(SL.vol){SL.u+=s/11;const port=cam.aspect<.8,x=(-14+28*SL.u)*SL.dir,y=CAL.cible.y+(port?4.6:4.9)+Math.sin(SL.u*PI)*.9+Math.sin(t/320)*.08;sg.position.set(x,y,HZ+2);sg.rotation.y=SL.dir>0?0:PI;sg.rotation.z=Math.sin(t/500)*.05;sg.visible=true;rennes.forEach((r,i)=>{r.position.y=.05+Math.sin(t/180+i)*.05;r.pattes.forEach((p,k)=>p.rotation.z=Math.sin(t/110+i+k*1.6)*.5)});if(SL.u>=1){SL.vol=false;sg.visible=false;SL.w=20+Math.random()*14}}}
     if(cad.visible){if(!CD.pose){CD.v.y-=7*s;cad.position.addScaledVector(CD.v,s);cad.rotation.x+=s*3;cad.rotation.z+=s*2;const g=alt(cad.position.x,cad.position.z)+.17;if(cad.position.y<g){cad.position.y=g;CD.pose=true;CD.t=0;cad.rotation.x=cad.rotation.z=0;const e=ecran(cad);CAL.onCadeau&&CAL.onCadeau(e.x,e.y)}}else{CD.t+=s;cad.position.y=alt(cad.position.x,cad.position.z)+.17+(CD.t<.4?Math.abs(Math.sin(CD.t*8))*.25*(1-CD.t/.4):0);if(CD.t>8||CAL.k<.5)cad.visible=false}}}}
+  /* ===== V2 : surprises du chalet (boules de neige, porte, enseigne disco) ===== */
+  {const inv=new T3.MeshBasicMaterial({visible:false}),neigeB=M(0xffffff,.6);
+   const facade=add(Hd,new T3.PlaneGeometry(W+.4,TOP),inv,0,TOP/2,D/2+.24,0);
+   const porte=add(Hd,new T3.BoxGeometry(1.25,1.9,.4),inv,0,.95,D/2+.3,0);
+   const ens=add(Hd,new T3.BoxGeometry(1.7,.5,.3),inv,0,1.52,D/2+.3,0);
+   const lueP=new T3.Mesh(new T3.PlaneGeometry(2.6,2.8),new T3.MeshBasicMaterial({map:cvT(128,128,(x,w,h)=>{const g=x.createRadialGradient(64,70,4,64,64,64);g.addColorStop(0,"rgba(255,215,140,1)");g.addColorStop(.4,"rgba(255,170,80,.5)");g.addColorStop(1,"rgba(255,140,60,0)");x.fillStyle=g;x.fillRect(0,0,w,h)}),transparent:true,depthWrite:false,blending:T3.AdditiveBlending,toneMapped:false,opacity:0}));lueP.position.set(0,.95,D/2+.45);lueP.renderOrder=4;Hd.add(lueP);
+   const boules=[],taches=[];let nb=0,disco=0,porteK=0;
+   const tacheG=new T3.CircleGeometry(.27,18);
+   const lancer=(de,vers,retour)=>{const b=new T3.Mesh(new T3.SphereGeometry(retour?.16:.12,14,10),neigeB);b.position.copy(de);dehors.add(b);boules.push({b,de:de.clone(),vers:vers.clone(),u:0,retour})};
+   const vC=V(0,0,0);
+   CAL.jeu=(cx,cy)=>{ray.setFromCamera({x:cx/innerWidth*2-1,y:-cy/innerHeight*2+1},cam);
+    const h=ray.intersectObjects([porte,ens,facade],false)[0];if(!h)return false;
+    if(h.object===porte){porteK=1;CAL.onPorte&&CAL.onPorte(cx,cy);return true}
+    if(h.object===ens){disco=6;CAL.onDisco&&CAL.onDisco(cx,cy);return true}
+    const de=cam.position.clone().add(V(0,-.6,0));lancer(de,h.point,false);nb++;return true};
+   const bons=[[-2.3,3.6],[2.6,3.9],[-1.3,4.5],[5.3,3.2]];
+   CAL.tickJeu=(dt,t)=>{const s=dt/1000;
+    for(let i=boules.length-1;i>=0;i--){const o=boules[i];o.u+=s/(o.retour?.75:.45);const u=Math.min(1,o.u);o.b.position.lerpVectors(o.de,o.vers,u);o.b.position.y+=Math.sin(u*PI)*(o.retour?1.2:.8);
+     if(o.retour)o.b.position.lerp(cam.position,Math.max(0,u-.85)*4);
+     if(u>=1){dehors.remove(o.b);boules.splice(i,1);
+      if(o.retour){CAL.onTouche&&CAL.onTouche()}
+      else{const m=new T3.Mesh(tacheG,new T3.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.95}));m.position.copy(o.vers).add(V(0,0,.02));m.scale.set(1+Math.random()*.6,.8+Math.random()*.5,1);m.rotation.z=Math.random()*6;dehors.add(m);taches.push({m,v:9});CAL.onSplat&&CAL.onSplat(nb);
+       if(nb%3===0){const k=bons[Math.floor(Math.random()*bons.length)];setTimeout(()=>lancer(V(k[0],alt(k[0],HZ+k[1])+1.3,HZ+k[1]),cam.position.clone(),true),calme?0:500)}}}}
+    for(let i=taches.length-1;i>=0;i--){const o=taches[i];o.v-=s;if(o.v<1)o.m.material.opacity=Math.max(0,o.v);if(o.v<=0){dehors.remove(o.m);taches.splice(i,1)}}
+    porteK=Math.max(0,porteK-s*.28);lueP.material.opacity=porteK>0?Math.min(1,porteK*3)*(.75+.25*Math.sin(t/90)):0;
+    if(disco>0){disco-=s;LUE.forEach((m,i)=>m.uniforms.f.value=m.userData.f0*(disco>0?.15+1.9*Math.abs(Math.sin(t/110+i*1.7)):Math.max(.02,lumO)))}}}
+  /* ===== V2 : Timothée se cache autour du chalet (où est Charlie) ===== */
+  {const tm=new T3.Mesh(perso.geometry,perso.material);tm.scale.setScalar(.62);dehors.add(tm);CAL.tm=tm;
+   const CT=[[-2.02,3.38,.32],[-4.55,1.25,.42],[3.62,2.3,.3],[4.6,2.95,.28],[5.35,1.05,.45],[-1.05,4.2,.2],[2.78,null,0]];let ci=Math.floor(Math.random()*6),tu=1,tb=0;
+   const place=()=>{const c=CT[ci];if(c[1]===null){tm.position.set(c[0],HY+TOP+RISE+.62,HZ-.25)}else tm.position.set(c[0],alt(c[0],HZ+c[1])+c[2],HZ+c[1]);tm.userData.y0=tm.position.y};place();
+   CAL.timo=(cx,cy)=>{if(!tm.visible||tu<1)return false;ray.setFromCamera({x:cx/innerWidth*2-1,y:-cy/innerHeight*2+1},cam);if(!ray.intersectObject(tm,false)[0])return false;tu=0;CAL.onTimo&&CAL.onTimo(cx,cy);return true};
+   CAL.tickTimo=(dt,t)=>{tm.visible=CAL.k>.6;if(!tm.visible)return;tm.rotation.y=Math.atan2(cam.position.x-tm.position.x,cam.position.z-tm.position.z);
+    if(tu<1){const a=tu;tu=Math.min(1,tu+dt/1500);const x=tu;tm.position.y=tm.userData.y0+(x<.45?Math.abs(Math.sin(x*21))*.3:-(x-.45)*3);tm.rotation.z=x<.45?Math.sin(x*30)*.18:0;if(tu>=1){ci=(ci+1+Math.floor(Math.random()*(CT.length-1)))%CT.length;place();tb=t}}
+    else{const f=(t-tb)%6200;tm.position.y=tm.userData.y0+(calme?0:f<700?-.35*(1-f/700):f>4800&&f<5900?-.3*Math.sin((f-4800)/1100*PI):0);tm.rotation.z=0}}}
   CAL.H=TOP+GR+.5;CAL.W=W;CAL.cible=V(0,HY+CAL.H/2-.1,HZ)}
 fusion(S,CHS);fusion(dehors,CHD);fusion(dehors,REFS.filter(f=>!f.chats).map(f=>f.g));
 let soirK=0;
@@ -849,7 +883,7 @@ etiquettes();maj();setInterval(maj,30000);
  const F=document.createElement("div");F.id="feuille";F.hidden=true;F.innerHTML='<div class="fBoite" role="dialog" aria-modal="true" aria-label="Détail"><button type="button" class="fX" id="fX" aria-label="Fermer">'+svg('<path d="M6 6l12 12M18 6L6 18"/>')+'</button><div id="fC"></div></div>';document.body.append(F);
  const $c=$("fC"),bul=$("calBulle");let tb;
  const bulle=(t,x,y)=>{bul.textContent=t;bul.style.left=clamp(x,150,innerWidth-150)+"px";bul.style.top=Math.max(90,y-18)+"px";bul.classList.remove("vu");void bul.offsetWidth;bul.classList.add("vu");clearTimeout(tb);tb=setTimeout(()=>bul.classList.remove("vu"),3200)};
- const statut=()=>{const s=$("calS");if(JOUR===0)s.textContent="Les fenêtres s'ouvrent le 30 novembre. Une personne de la classe par jour, jusqu'à la soirée du 16 décembre.";else if(JOUR>17)s.textContent="Le calendrier est complet. Joyeux Noël, les M32.";else if(JOUR===17&&vus.has(17))s.textContent=vus.has(18)?"C'est ce soir. On se retrouve à la fête.":"C'est ce soir. L'étoile s'est allumée : ouvre-la.";else if(!vus.has(JOUR))s.textContent="La fenêtre du "+DATEJ(JOUR)+" brille. Touche-la pour l'ouvrir.";else s.textContent="La fenêtre du "+DATEJ(JOUR)+" est ouverte. La suivante s'allume demain.";
+ const statut=()=>{const s=$("calS");if(JOUR===0)s.textContent="Les fenêtres s'ouvrent le 30 novembre. Une personne de la classe par jour, jusqu'à la soirée du 16 décembre.";else if(JOUR>17)s.textContent="Le calendrier est complet. Joyeux Noël, les M32.";else if(JOUR===17&&vus.has(17))s.textContent=vus.has(18)?"C'est ce soir. On se retrouve à la fête.":"C'est ce soir. L'étoile s'est allumée : ouvre-la.";else if(!vus.has(JOUR))s.textContent="La fenêtre du "+DATEJ(JOUR)+" brille. Touche-la pour l'ouvrir.";else s.textContent="La fenêtre du "+DATEJ(JOUR)+" est ouverte. La suivante s'allume demain.";if(!statut.i){statut.i=1;setTimeout(()=>{if(mode&&F.hidden)bulle("Psst : Timothée s\'est caché quelque part autour du chalet. Et il y a 6 secrets.",innerWidth/2,innerHeight*.2)},calme?0:9000)}
   const j=Math.ceil((SOIREE()-Date.now())/864e5);$("calJ").textContent=j>0?"J-"+j:"C'est ce soir";$("bAwards").hidden=JOUR<17};
  let retour=null;const ouvrirF=(html,focus)=>{retour=document.activeElement;$c.innerHTML="";if(typeof html==="string")$c.innerHTML=html;else $c.append(html);F.hidden=false;F.querySelector(".fBoite").scrollTop=0;ui.classList.add("bas");setTimeout(()=>$("fX").focus({preventScroll:true}),60)};
  const fermerF=()=>{if(F.hidden)return;const r=document.querySelector("#fC .rdv");if(r)$("zone").append(r);F.hidden=true;ui.classList.remove("bas");C.viser(null);retour&&retour.isConnected&&retour.focus({preventScroll:true})};
@@ -869,6 +903,19 @@ etiquettes();maj();setInterval(maj,30000);
   if(n===JOUR&&!vus.has(n)){vus.add(n);ls.set("vus",[...vus]);C.ouvrir(n,nomDe(n));statut();try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}setTimeout(()=>{const e=C.ecranFen(n);confettis(e.x,e.y,110)},calme?0:650);setTimeout(()=>{C.viser(n);ouvrirF(fiche(n));if(n===17)C.etat(JOUR,nomDe,vus)},calme?0:1500);return}
   C.viser(n);ouvrirF(fiche(n))};
  C.onCadeau=(x,y)=>{confettis(x,y,40);bulle(BLAGUES[Math.floor(Math.random()*BLAGUES.length)],x,y-30)};
+
+ /* surprises : secrets du chalet, à la manière des refs du village de la V1 */
+ const SECRETS=["timo","porte","disco","boule","traineau","touche"],trouves=new Set(ls.get("secrets",[]));
+ const secret=k=>{if(trouves.has(k))return"";trouves.add(k);ls.set("secrets",[...trouves]);if(trouves.size===SECRETS.length)setTimeout(()=>confettis(),400);return" Secret "+trouves.size+" / "+SECRETS.length+"."};
+ const TOC=["Toc toc. Personne. Tout le monde est parti acheter son cadeau à la dernière minute.","Le Père Noël dort. Il a ouvert 17 fenêtres, il est épuisé.","On n'entre pas sans un cadeau à 10 €. Neuf euros quatre-vingt-dix-neuf, ça passe.","Mot de passe ? Indice : ce n'est pas « Mister Perdu ».","Le lutin de garde dit : « Repasse le 16 décembre. »","Chut. Quelqu'un emballe ton cadeau derrière cette porte.","Désolé, c'est complet. Même le renne dort dans la luge."];
+ const SPLAT=["En plein dans le mille.","Le chalet n'a rien senti.","Tu viens de geler un lutin.","Encore une et le toit s'effondre. Non, on rigole."];
+ C.onTimo=(x,y)=>{const n=ls.get("timo",0)+1;ls.set("timo",n);confettis(x,y,70);try{navigator.vibrate&&navigator.vibrate([12,40,12])}catch(_){}bulle((n===1?"Trouvé ! Timothée trinque à ta santé.":n===2?"Encore lui. Il change de cachette.":"Timothée trouvé "+n+" fois. Il ne se lasse pas.")+secret("timo"),x,y-20)};
+ C.onPorte=(x,y)=>bulle(TOC[(ls.get("toc",0))%TOC.length]+secret("porte"),x,y)||ls.set("toc",ls.get("toc",0)+1);
+ C.onDisco=(x,y)=>{bulle("Mode soirée du 16 activé."+secret("disco"),x,y);for(let i=0;i<4;i++)setTimeout(()=>confettis(Math.random()*innerWidth,innerHeight*.3,35),i*700)};
+ C.onSplat=n=>{if(n===1)bulle("Bataille de boules de neige ouverte."+secret("boule"),innerWidth/2,innerHeight*.3);else if(n%3===2)bulle(SPLAT[Math.floor(Math.random()*SPLAT.length)]+" Attention, il y a des représailles.",innerWidth/2,innerHeight*.3)};
+ const plaf=document.createElement("div");plaf.className="plaf";plaf.innerHTML='<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M100 28c14 0 18 18 31 20s30-8 36 6-12 22-8 36 22 20 14 34-24 2-33 12-4 30-20 32-16-20-30-22-26 12-35 0 6-24-2-34-30-14-24-30 26-8 32-20-2-30 14-34 17 0 25 0z"/><circle cx="168" cy="40" r="9"/><circle cx="32" cy="150" r="7"/><circle cx="176" cy="150" r="6"/><path d="M84 160c0 14 6 26 6 34 0 4-6 4-6 0zM120 158c2 10 6 16 6 22 0 4-6 4-6 0z"/></svg>';document.body.append(plaf);
+ C.onTouche=()=>{plaf.classList.remove("vu");void plaf.offsetWidth;plaf.classList.add("vu");try{navigator.vibrate&&navigator.vibrate([40,30,80])}catch(_){}setTimeout(()=>bulle("Touché. Les bonshommes de neige ont de la rancune."+secret("touche"),innerWidth/2,innerHeight*.72),500)};
+ const cadeauV=C.onCadeau;C.onCadeau=(x,y)=>{confettis(x,y,40);bulle(BLAGUES[Math.floor(Math.random()*BLAGUES.length)]+secret("traineau"),x,y-30)};
  /* boîte aux lettres */
  const boite=()=>{const el=document.createElement("form");el.className="poste";el.noValidate=true;el.innerHTML='<h3>La boîte aux lettres du Père Noël</h3><p>Glisse un indice anonyme à la personne que tu as tirée. Sara lit chaque lettre avant qu\'elle arrive.</p><label for="pPour">Pour</label><select id="pPour"><option value="">Choisis un prénom</option>'+CONFIG.noms.map(n=>'<option>'+txt(n)+'</option>').join("")+'</select><label for="pMot">Ton indice</label><textarea id="pMot" maxlength="180" rows="4" placeholder="Ton lutin aime le chocolat chaud et les dossiers rendus à 23 h 59."></textarea><p class="pErr" id="pErr" role="alert"></p><button class="cta" type="submit">Poster la lettre</button>';
   el.onsubmit=e=>{e.preventDefault();const p=$("pPour").value,m=$("pMot").value.trim();if(!p)return $("pErr").textContent="Choisis à qui tu écris.";if(m.length<4)return $("pErr").textContent="Ton indice est un peu court.";

@@ -1176,7 +1176,7 @@ etiquettes();maj();setInterval(maj,30000);
  C.onFen=(n,x,y)=>{if(!F.hidden)return;if(n===18){if(JOUR<17||(JOUR===17&&!vus.has(17))){C.secouer(18);bulle(ETOILE[Math.floor(Math.random()*ETOILE.length)],x,y);return}if(!vus.has(18)){vus.add(18);ls.set("vus",[...vus]);C.ouvrir(18,"La soirée");statut();setTimeout(()=>{const e=C.ecranFen(18);confettis(e.x,e.y,150)},calme?0:650);setTimeout(()=>{C.viser(18);$("bAwards").click()},calme?0:1500);return}C.viser(18);$("bAwards").click();return}if(n>JOUR){C.secouer(n);try{navigator.vibrate&&navigator.vibrate([10,30,10])}catch(_){}const l=JOUR===0?PREMIER:NONS;bulle(l[Math.floor(Math.random()*l.length)].replace("{d}",DATEJ(n)),x,y);return}
   if(n===JOUR&&!vus.has(n)){vus.add(n);ls.set("vus",[...vus]);C.ouvrir(n,nomDe(n));statut();try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}setTimeout(()=>{const e=C.ecranFen(n);confettis(e.x,e.y,110)},calme?0:650);setTimeout(()=>{C.viser(n);ouvrirF(fiche(n));if(n===17)C.etat(JOUR,nomDe,vus)},calme?0:1500);return}
   C.viser(n);ouvrirF(fiche(n))};
- {let ib=Math.floor(Math.random()*BLAGUES.length);C.blagueSapin=(x,y)=>{confettis(x,y,70);ib=(ib+1)%BLAGUES.length;bulle(BLAGUES[ib],x,y-40)}}
+ {let ib=Math.floor(Math.random()*BLAGUES.length);C.blagueSapin=(x,y)=>{confettis(x,y,70);ib=(ib+1)%BLAGUES.length;const mai=bul.parentElement;if(mai!==document.body){document.body.append(bul);setTimeout(()=>mai.append(bul),3400)}bulle(BLAGUES[ib],x,y-40)}}
  C.onCadeau=(x,y)=>{confettis(x,y,40);bulle(BLAGUES[Math.floor(Math.random()*BLAGUES.length)],x,y-30)};
 
  /* ===== calendrier illustré : l'image du chalet, les vrais volets s'ouvrent par-dessus ===== */
